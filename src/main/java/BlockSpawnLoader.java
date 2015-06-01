@@ -3,15 +3,15 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.server.MapInitializeEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 
 /**
  * Created by darryl on 29-5-15.
  */
 public class BlockSpawnLoader extends EventLoader {
     @EventHandler
-    public void onMapLoad(MapInitializeEvent event) {
-        World world = event.getMap().getWorld();
+    public void onMapLoad(WorldLoadEvent event) {
+        World world = event.getWorld();
 
         int y;
         int x;
@@ -41,11 +41,14 @@ public class BlockSpawnLoader extends EventLoader {
                 currentBlock = world.getBlockAt(loc);
             }
 
+            y += 3;
+
             for (int i = y; i < 10; i++) {
                 blockCoords = new Coords(x, z, i, type);
                 loc = new Location(world, blockCoords.getX(), blockCoords.getY(), blockCoords.getZ(), 0f, 0f);
                 world.getBlockAt(loc).setType(Material.OBSIDIAN);
             }
+            logger.info("Block placed at " + blockCoords.toString());
         }
     }
 }
