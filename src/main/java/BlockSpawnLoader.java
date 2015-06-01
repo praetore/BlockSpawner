@@ -12,16 +12,39 @@ public class BlockSpawnLoader extends EventLoader {
     @EventHandler
     public void onMapLoad(MapInitializeEvent event) {
         World world = event.getMap().getWorld();
+
+        int y;
+        int x;
+        int z;
+        int type;
+
+        String[] split;
         Coords blockCoords;
+        Location loc;
+        Block currentBlock;
+
         for (String line : CoordsData.getData()) {
-            String[] split = line.split(";");
-            for (int i = 64; i < 256; i++) {
-                blockCoords = new Coords(Integer.parseInt(split[1]), Integer.parseInt(split[2]), i, Integer.parseInt(split[0]));
-                Location loc = new Location(world, blockCoords.getX(), blockCoords.getY(), blockCoords.getZ(), 0f, 0f);
-                Block currentBlock = world.getBlockAt(loc);
-                if (currentBlock.getType().equals(Material.AIR)) {
-                    currentBlock.setType(Material.OBSIDIAN);
-                }
+            split = line.split(";");
+            y = 0;
+            x = Integer.parseInt(split[1]);
+            z = Integer.parseInt(split[2]);
+            type = Integer.parseInt(split[0]);
+
+            blockCoords = new Coords(x, z, y, type);
+            loc = new Location(world, blockCoords.getX(), blockCoords.getY(), blockCoords.getZ(), 0f, 0f);
+            currentBlock = world.getBlockAt(loc);
+
+            while (!currentBlock.getType().equals(Material.AIR)) {
+                y++;
+                blockCoords = new Coords(x, z, y, type);
+                loc = new Location(world, blockCoords.getX(), blockCoords.getY(), blockCoords.getZ(), 0f, 0f);
+                currentBlock = world.getBlockAt(loc);
+            }
+
+            for (int i = y; i < 10; i++) {
+                blockCoords = new Coords(x, z, i, type);
+                loc = new Location(world, blockCoords.getX(), blockCoords.getY(), blockCoords.getZ(), 0f, 0f);
+                world.getBlockAt(loc).setType(Material.OBSIDIAN);
             }
         }
     }
