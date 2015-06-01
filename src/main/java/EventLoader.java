@@ -1,3 +1,4 @@
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,7 +13,7 @@ abstract public class EventLoader extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        logger = getLogger();
+        logger = Bukkit.getLogger();
         getServer().getPluginManager().registerEvents(this, this);
     }
 
