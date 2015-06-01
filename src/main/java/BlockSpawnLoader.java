@@ -8,7 +8,7 @@ import org.bukkit.event.server.MapInitializeEvent;
 /**
  * Created by darryl on 29-5-15.
  */
-public class BlockSpawnLoader extends EventPlugin {
+public class BlockSpawnLoader extends EventLoader {
     @EventHandler
     public void onMapLoad(MapInitializeEvent event) {
         World world = event.getMap().getWorld();
