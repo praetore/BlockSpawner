@@ -1,3 +1,5 @@
+package plugin;
+
 /**
  * Created by darryl on 25-5-15.
  */
@@ -40,7 +42,7 @@ public class Coords {
 
     @Override
     public String toString() {
-        return "Coords{" +
+        return "plugin.Coords{" +
                 "x=" + x +
                 ", z=" + z +
                 ", y=" + y +

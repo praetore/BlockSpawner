@@ -1,3 +1,5 @@
+package plugin;
+
 /**
  * Created by darryl on 26-5-15.
  */

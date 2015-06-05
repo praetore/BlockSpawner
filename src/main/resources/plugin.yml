@@ -1,3 +1,9 @@
 name: BlockSpawner
 version: 0.1
-main: BlockSpawnLoader
+main: plugin.CommandManagerr
+description: Spawn obsidian blocks at set coordinates
+commands:
+  placeblocks:
+    aliases: [p]
+    description: Place obsidian blocks
+    usage: Type /placeblocks
