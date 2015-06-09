@@ -34,7 +34,7 @@ public class WorldEditor {
         currentBlock = world.getBlockAt(location);
 
         while (!currentBlock.getType().equals(Material.AIR)) {
-            height++;
+            height--;
             location.setY(location.getY() + height);
             currentBlock = world.getBlockAt(location);
         }

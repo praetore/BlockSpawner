@@ -26,7 +26,7 @@ public class BlockSpawnCommand implements CommandExecutor{
             WorldEditor worldEditor = WorldEditor.getInstance();
             for (String line : GeoLoader.getData()) {
                 split = line.split(";");
-                y = 0;
+                y = 256;
                 x = Integer.parseInt(split[1]);
                 z = Integer.parseInt(split[2]);
                 type = Integer.parseInt(split[0]);
