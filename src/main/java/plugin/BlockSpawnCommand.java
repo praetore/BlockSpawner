@@ -1,9 +1,7 @@
 package plugin;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,37 +22,20 @@ public class BlockSpawnCommand implements CommandExecutor{
             int type;
 
             String[] split;
-            Coords blockCoords;
-            Location loc;
-            Block currentBlock;
 
-            for (String line : CoordsData.getData()) {
+            WorldEditor worldEditor = WorldEditor.getInstance();
+            for (String line : GeoLoader.getData()) {
                 split = line.split(";");
                 y = 0;
                 x = Integer.parseInt(split[1]);
                 z = Integer.parseInt(split[2]);
                 type = Integer.parseInt(split[0]);
 
-                blockCoords = new Coords(x, z, y, type);
-                loc = new Location(world, blockCoords.getX(), blockCoords.getY(), blockCoords.getZ(), 0f, 0f);
-                currentBlock = world.getBlockAt(loc);
-
-                while (!currentBlock.getType().equals(Material.AIR)) {
-                    y++;
-                    blockCoords = new Coords(x, z, y, type);
-                    loc = new Location(world, blockCoords.getX(), blockCoords.getY(), blockCoords.getZ(), 0f, 0f);
-                    currentBlock = world.getBlockAt(loc);
+                if (type == 2 || type == 4) {
+                    worldEditor.placeBlocks(world, new Location(world, x, y, z));
+                    String msg = "Meerpaal geplaatst";
+                    player.chat(msg);
                 }
-
-                y += 3;
-
-                for (int i = y; i < 10; i++) {
-                    blockCoords = new Coords(x, z, i, type);
-                    loc = new Location(world, blockCoords.getX(), blockCoords.getY(), blockCoords.getZ(), 0f, 0f);
-                    world.getBlockAt(loc).setType(Material.OBSIDIAN);
-                }
-                String msg = "Block placed at " + blockCoords.toString();
-                player.chat(msg);
             }
             return true;
         } else {

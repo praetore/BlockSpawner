@@ -17,6 +17,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/bukkit-1.7.10-R0.1-20140817.175650-8.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.jnbt</groupId>
+            <artifactId>jnbt</artifactId>
+            <version>1.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/jnbt-1.1.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
