@@ -7,3 +7,7 @@ commands:
     aliases: [p]
     description: Place obsidian blocks
     usage: Type /placeblocks
+  testplacement:
+    aliases: [c]
+    description: Place a cow above player's heads
+    usage: Type /testplacement

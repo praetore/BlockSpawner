@@ -33,7 +33,7 @@ public class BlockSpawnCommand implements CommandExecutor{
 
                 if (type == 2 || type == 4) {
                     worldEditor.placeBlocks(world, new Location(world, x, y, z));
-                    String msg = "Meerpaal geplaatst";
+                    String msg = "Meerpaal geplaatst op X:" + x + " - Y:" + y + " Z:" + z;
                     player.chat(msg);
                 }
             }
