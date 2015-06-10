@@ -28,24 +28,20 @@ public class WorldEditor {
         return instance;
     }
 
-    public void placeBlocks(World world, Location location) {
-        Block currentBlock;
-        double height = location.getY();
-        currentBlock = world.getBlockAt(location);
-
-        while (!currentBlock.getType().equals(Material.AIR)) {
-            height--;
-            location.setY(location.getY() + height);
-            currentBlock = world.getBlockAt(location);
-        }
-
-        final int offsetFromGround = (int) (height + 1);
+    public Location placeBlocks(World world, Location location) {
         final int numBlocks = 4;
 
-        for (int i = offsetFromGround; i < numBlocks; i++) {
-            location.setY(location.getY() + i);
+        while (location.getBlock().getType() == Material.AIR) {
+            location.setY(location.getY()-1);
+        }
+
+        for (int i = 0; i < numBlocks; i++) {
+            location.setY(location.getY() + 1);
             world.getBlockAt(location).setType(Material.WOOD);
         }
+
+        location.setY(location.getY() - numBlocks);
+        return location;
     }
 
     public void placeSchematic(World world, Location loc, Schematic schematic) {

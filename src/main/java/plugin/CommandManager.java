@@ -1,11 +1,11 @@
 package plugin;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,9 +22,10 @@ public class CommandManager extends JavaPlugin {
             public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
                 if (commandSender instanceof Player) {
                     Player player = (Player) commandSender;
+                    World world = player.getWorld();
                     Location location = player.getLocation();
-                    World world = location.getWorld();
-                    world.spawnEntity(new Location(world, location.getX(), location.getY() + 5, location.getZ()), EntityType.COW);
+                    location.setX(location.getX() + 2);
+                    WorldEditor.getInstance().placeBlocks(world, location);
                     return true;
                 } else {
                     return false;
