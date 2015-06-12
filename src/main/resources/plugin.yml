@@ -1,13 +1,21 @@
 name: BlockSpawner
 version: 0.1
 main: plugin.CommandManager
-description: Spawn obsidian blocks at set coordinates
+description: Spawn game objects across the map
 commands:
   placeblocks:
     aliases: [p]
-    description: Place obsidian blocks
+    description: Place wooden blocks according to set coordinates
     usage: Type /placeblocks
   testplacement:
     aliases: [c]
-    description: Place a cow above player's heads
+    description: Place wooden blocks next to the players location
     usage: Type /testplacement
+  testschematic:
+    aliases: [s]
+    description: Place a schematic in the map
+    usage: Type /testschematic
+  filepresent:
+    aliases: [f]
+    description: Test if schematics can be called from resource folder
+    usage: Type /filepresent

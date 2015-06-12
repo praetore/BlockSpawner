@@ -31,7 +31,7 @@
         <directory>${project.basedir}/target</directory>
         <finalName>${project.name}</finalName>
 
-        <!-- Include .yml files -->
+        <!-- Include .yml and .schematic files -->
         <resources>
             <resource>
                 <targetPath>.</targetPath>
@@ -39,6 +39,7 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>plugin.yml</include>
+                    <include>paal.schematic</include>
                 </includes>
             </resource>
         </resources>

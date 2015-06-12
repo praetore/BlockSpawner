@@ -9,6 +9,7 @@ import org.jnbt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -65,7 +66,7 @@ public class WorldEditor {
 
     public Schematic loadSchematic(File file) throws IOException
     {
-        FileInputStream stream = new FileInputStream(file);
+        InputStream stream = new FileInputStream(file);
         NBTInputStream nbtStream = new NBTInputStream(new GZIPInputStream(stream));
 
         CompoundTag schematicTag = (CompoundTag) nbtStream.readTag();
