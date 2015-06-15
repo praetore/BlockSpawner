@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.io.*;
 
-import static plugin.SchematicPaths.PAALSCHEMATICPATH;
+import static plugin.ResourceFiles.PAALSCHEMATICPATH;
 
 /**
  * Created by darryl on 5-6-15.
@@ -29,9 +29,10 @@ public class BlockSpawnCommand implements CommandExecutor{
             World world = player.getWorld();
             WorldEditor worldEditor = WorldEditor.getInstance();
 
-            Schematic schematic;
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream));
             try {
+                Material bolder = Material.ANVIL;
+                Schematic paal = WorldEditor.getInstance().loadSchematic(new File(PAALSCHEMATICPATH));
 
                 while (bufferedReader.ready()) {
                     String line = bufferedReader.readLine();
@@ -44,14 +45,11 @@ public class BlockSpawnCommand implements CommandExecutor{
                     Location currentLocation = new Location(world, x, y, z);
                     switch (type) {
                         case 1:
-                            worldEditor.placeBlocks(world, currentLocation, 1, Material.ANVIL);
+                            worldEditor.placeBlocks(world, currentLocation, 1, bolder);
                             break;
                         case 2:
                         case 4:
-                            schematic = WorldEditor.getInstance().loadSchematic(
-                                    new File(PAALSCHEMATICPATH)
-                            );
-                            worldEditor.placeSchematic(world, currentLocation, schematic);
+                            worldEditor.placeSchematic(world, currentLocation, paal);
                             break;
                     }
                 }

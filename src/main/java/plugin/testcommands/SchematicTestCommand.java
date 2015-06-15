@@ -12,7 +12,7 @@ import plugin.WorldEditor;
 import java.io.File;
 import java.io.IOException;
 
-import static plugin.SchematicPaths.PAALSCHEMATICPATH;
+import static plugin.ResourceFiles.PAALSCHEMATICPATH;
 
 /**
  * Created by darryl on 16-6-15.

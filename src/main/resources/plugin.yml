@@ -15,7 +15,3 @@ commands:
     aliases: [s]
     description: Place a schematic in the map
     usage: Type /testschematic
-  testfilepresent:
-    aliases: [f]
-    description: Test the presence of a csv file in the resource folder
-    usage: Type /testfilepresent
