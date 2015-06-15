@@ -9,9 +9,7 @@ import org.jnbt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 /**
  * Created by darryl on 9-6-15.
@@ -45,7 +43,11 @@ public class WorldEditor {
         return location;
     }
 
-    public void placeSchematic(World world, Location loc, Schematic schematic) {
+    public Location placeSchematic(World world, Location location, Schematic schematic) {
+        while (location.getBlock().getType() == Material.AIR) {
+            location.setY(location.getY()-1);
+        }
+
         byte[] blocks = schematic.getBlocks();
         byte[] blockData = schematic.getData();
 
@@ -57,17 +59,16 @@ public class WorldEditor {
             for (int y = 0; y < height; ++y) {
                 for (int z = 0; z < length; ++z) {
                     int index = y * width * length + z * width + x;
-                    Block block = new Location(world, x + loc.getX(), y + loc.getY(), z + loc.getZ()).getBlock();
+                    Block block = new Location(world, x + location.getX(), y + location.getY(), z + location.getZ()).getBlock();
                     block.setTypeIdAndData(blocks[index], blockData[index], true);
                 }
             }
         }
+        return location;
     }
 
-    public Schematic loadSchematic(File file) throws IOException
-    {
-        InputStream stream = new FileInputStream(file);
-        NBTInputStream nbtStream = new NBTInputStream(new GZIPInputStream(stream));
+    public Schematic loadSchematic(File file) throws IOException {
+        NBTInputStream nbtStream = new NBTInputStream(new FileInputStream(file));
 
         CompoundTag schematicTag = (CompoundTag) nbtStream.readTag();
         if (!schematicTag.getName().equals("Schematic")) {

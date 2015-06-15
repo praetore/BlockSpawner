@@ -10,11 +10,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Created by darryl on 5-6-15.
  */
 public class CommandManager extends JavaPlugin {
+    private final Logger logger;
+    private final String PAALSCHEMATICPATH = "plugins" + File.separator + "WorldEdit" + File.separator +
+            "schematics" + File.separator + "paal.schematic";
+
+    public CommandManager() {
+        logger = getLogger();
+    }
+
     @Override
     public void onEnable() {
         BlockSpawnCommand spawnCommand = new BlockSpawnCommand();
@@ -30,6 +39,7 @@ public class CommandManager extends JavaPlugin {
                     WorldEditor.getInstance().placeBlocks(world, location);
                     return true;
                 } else {
+                    logger.severe("Placing blocks has failed");
                     return false;
                 }
             }
@@ -42,36 +52,18 @@ public class CommandManager extends JavaPlugin {
                     World world = player.getWorld();
                     Location location = player.getLocation();
                     location.setX(location.getX() + 2);
-                    location.setY(location.getY() + 1);
+                    location.setY(location.getY());
                     try {
-                        Schematic building = WorldEditor.getInstance()
-                                .loadSchematic(new File(getClass().getResource("/paal.schematic").getFile()));
+                        File file = new File(PAALSCHEMATICPATH);
+                        Schematic building = WorldEditor.getInstance().loadSchematic(file);
                         WorldEditor.getInstance().placeSchematic(world, location, building);
                     } catch (IOException e) {
+                        logger.severe("Schematic file can not be opened");
+                        return false;
+                    } catch (Exception e) {
+                        logger.severe("Something else went wrong");
                         return false;
                     }
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-        getCommand("filepresent").setExecutor(new CommandExecutor() {
-            @Override
-            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-                if (commandSender instanceof Player) {
-                    Player player = (Player) commandSender;
-                    int available;
-                    try {
-                        available = getResource("paal.schematic").available();
-                    } catch (IOException e) {
-                        available = -1;
-                        player.chat("File doesn't exists");
-                    } catch (Exception e) {
-                        available = -1;
-                        player.chat("Something else went wrong");
-                    }
-                    player.chat("File existence: " + available);
                     return true;
                 } else {
                     return false;
