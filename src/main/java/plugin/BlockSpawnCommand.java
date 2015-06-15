@@ -10,12 +10,12 @@ import org.bukkit.entity.Player;
 
 import java.io.*;
 
+import static plugin.SchematicPaths.PAALSCHEMATICPATH;
+
 /**
  * Created by darryl on 5-6-15.
  */
 public class BlockSpawnCommand implements CommandExecutor{
-    private final String PAALSCHEMATICPATH = "plugins" + File.separator + "WorldEdit" + File.separator +
-            "schematics" + File.separator + "paal.schematic";
     private final InputStream inputstream;
 
     public BlockSpawnCommand(InputStream stream) {
@@ -29,10 +29,10 @@ public class BlockSpawnCommand implements CommandExecutor{
             World world = player.getWorld();
             WorldEditor worldEditor = WorldEditor.getInstance();
 
-            Schematic PAALSCHEMATIC;
+            Schematic schematic;
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream));
             try {
-                PAALSCHEMATIC = WorldEditor.getInstance().loadSchematic(new File(PAALSCHEMATICPATH));
+
                 while (bufferedReader.ready()) {
                     String line = bufferedReader.readLine();
                     String[] split = line.split(";");
@@ -41,36 +41,19 @@ public class BlockSpawnCommand implements CommandExecutor{
                     int z = Integer.parseInt(split[2]);
                     int type = Integer.parseInt(split[0]);
 
-                    String msg = null;
-                    Location placedAt;
                     Location currentLocation = new Location(world, x, y, z);
                     switch (type) {
                         case 1:
-                            placedAt = worldEditor.placeBlocks(world, currentLocation, 1, Material.ANVIL);
-                            msg = new StringBuilder()
-                                    .append("Bolder geplaatst op X:")
-                                    .append(placedAt.getX())
-                                    .append(" Y:")
-                                    .append(placedAt.getY())
-                                    .append(" Z:")
-                                    .append(placedAt.getZ())
-                                    .toString();
+                            worldEditor.placeBlocks(world, currentLocation, 1, Material.ANVIL);
                             break;
                         case 2:
                         case 4:
-                            placedAt = worldEditor.placeSchematic(world,
-                                    currentLocation, PAALSCHEMATIC);
-                            msg = new StringBuilder()
-                                    .append("Meerpaal geplaatst op X:")
-                                    .append(placedAt.getX())
-                                    .append(" Y:")
-                                    .append(placedAt.getY())
-                                    .append(" Z:")
-                                    .append(placedAt.getZ())
-                                    .toString();
+                            schematic = WorldEditor.getInstance().loadSchematic(
+                                    new File(PAALSCHEMATICPATH)
+                            );
+                            worldEditor.placeSchematic(world, currentLocation, schematic);
                             break;
                     }
-                    player.chat(msg);
                 }
             } catch (IOException e) {
                 return false;

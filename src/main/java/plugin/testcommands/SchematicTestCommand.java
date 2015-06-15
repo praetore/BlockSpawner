@@ -12,16 +12,12 @@ import plugin.WorldEditor;
 import java.io.File;
 import java.io.IOException;
 
+import static plugin.SchematicPaths.PAALSCHEMATICPATH;
+
 /**
  * Created by darryl on 16-6-15.
  */
 public class SchematicTestCommand implements CommandExecutor {
-    private String filepath;
-
-    public SchematicTestCommand(String path) {
-        this.filepath = path;
-    }
-
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (commandSender instanceof Player) {
@@ -31,7 +27,7 @@ public class SchematicTestCommand implements CommandExecutor {
             location.setX(location.getX() + 2);
             location.setY(location.getY());
             try {
-                File file = new File(filepath);
+                File file = new File(PAALSCHEMATICPATH);
                 Schematic building = WorldEditor.getInstance().loadSchematic(file);
                 WorldEditor.getInstance().placeSchematic(world, location, building);
             } catch (IOException e) {

@@ -28,7 +28,7 @@ public class WorldEditor {
         return instance;
     }
 
-    public Location placeBlocks(World world, Location location, int numBlocks, Material material) {
+    public void placeBlocks(World world, Location location, int numBlocks, Material material) {
         while (location.getBlock().getType() == Material.AIR) {
             location.setY(location.getY()-1);
         }
@@ -39,10 +39,9 @@ public class WorldEditor {
         }
 
         location.setY(location.getY() - numBlocks);
-        return location;
     }
 
-    public Location placeSchematic(World world, Location location, Schematic schematic) {
+    public void placeSchematic(World world, Location location, Schematic schematic) {
         while (location.getBlock().getType() == Material.AIR) {
             location.setY(location.getY()-1);
         }
@@ -63,7 +62,6 @@ public class WorldEditor {
                 }
             }
         }
-        return location;
     }
 
     public Schematic loadSchematic(File file) throws IOException {
