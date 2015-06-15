@@ -1,10 +1,11 @@
 package plugin;
 
+import ch.spacebase.opennbt.stream.NBTInputStream;
+import ch.spacebase.opennbt.tag.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.jnbt.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,16 +28,14 @@ public class WorldEditor {
         return instance;
     }
 
-    public Location placeBlocks(World world, Location location) {
-        final int numBlocks = 4;
-
+    public Location placeBlocks(World world, Location location, int numBlocks, Material material) {
         while (location.getBlock().getType() == Material.AIR) {
             location.setY(location.getY()-1);
         }
 
         for (int i = 0; i < numBlocks; i++) {
             location.setY(location.getY() + 1);
-            world.getBlockAt(location).setType(Material.WOOD);
+            world.getBlockAt(location).setType(material);
         }
 
         location.setY(location.getY() - numBlocks);

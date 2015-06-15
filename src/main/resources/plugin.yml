@@ -1,5 +1,5 @@
 name: BlockSpawner
-version: 0.1
+version: 0.2
 main: plugin.CommandManager
 description: Spawn game objects across the map
 commands:
@@ -15,3 +15,7 @@ commands:
     aliases: [s]
     description: Place a schematic in the map
     usage: Type /testschematic
+  testfilepresent:
+    aliases: [f]
+    description: Test the presence of a csv file in the resource folder
+    usage: Type /testfilepresent
