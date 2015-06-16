@@ -27,7 +27,6 @@ public class BlockSpawnCommand implements CommandExecutor{
         if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
             World world = player.getWorld();
-            WorldEditor worldEditor = WorldEditor.getInstance();
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream));
             try {
@@ -37,25 +36,28 @@ public class BlockSpawnCommand implements CommandExecutor{
                 while (bufferedReader.ready()) {
                     String line = bufferedReader.readLine();
                     String[] split = line.split(",");
-                    int y = 256;
+                    int type = Integer.parseInt(split[0]);
                     int x = Integer.parseInt(split[1]);
                     int z = Integer.parseInt(split[2]);
-                    int type = Integer.parseInt(split[0]);
+                    int y = world.getHighestBlockYAt(x, z);
 
                     Location currentLocation = new Location(world, x, y, z);
-					StringBuilder sb = new StringBuilder().
-						append("Placed ");
+					StringBuilder sb = new StringBuilder().append("Placed ");
                     switch (type) {
                         case 1:
-                            worldEditor.getInstance().placeBlocks(world, currentLocation, 1, bolder);
-							sb.append("Bolder ");
+                            WorldEditor.getInstance().placeBlocks(world, currentLocation, 1, bolder);
+                            sb.append("Bolder ");
+                            break;
+                        case 2:
+                            WorldEditor.getInstance().placeSchematic(world, currentLocation, paal);
+                            sb.append("Paal ");
                             break;
                         case 4:
-                            worldEditor.getInstance().placeSchematic(world, currentLocation, paal);
+                            WorldEditor.getInstance().placeSchematic(world, currentLocation, paal);
 							sb.append("Paal ");
                             break;
                     }
-					sb.append("at ").append("X: ").append(x).append(" Z: ").append(z);
+					sb.append("at ").append("X: ").append(x).append(" Y: ").append(y).append(" Z: ").append(z);
 					player.chat(sb.toString());
                 }
             } catch (IOException e) {

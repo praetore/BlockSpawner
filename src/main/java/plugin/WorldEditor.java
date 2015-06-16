@@ -29,23 +29,13 @@ public class WorldEditor {
     }
 
     public void placeBlocks(World world, Location location, int numBlocks, Material material) {
-        while (location.getBlock().getType() == Material.AIR) {
-            location.setY(location.getY()-1);
-        }
-
         for (int i = 0; i < numBlocks; i++) {
-            location.setY(location.getY() + 1);
+            location.setY(location.getY() + i);
             world.getBlockAt(location).setType(material);
         }
-
-        location.setY(location.getY() - numBlocks);
     }
 
     public void placeSchematic(World world, Location location, Schematic schematic) {
-        while (location.getBlock().getType() == Material.AIR) {
-            location.setY(location.getY()-1);
-        }
-
         byte[] blocks = schematic.getBlocks();
         byte[] blockData = schematic.getData();
 
