@@ -36,7 +36,7 @@ public class BlockSpawnCommand implements CommandExecutor{
 
                 while (bufferedReader.ready()) {
                     String line = bufferedReader.readLine();
-                    String[] split = line.split(";");
+                    String[] split = line.split(",");
                     int y = 256;
                     int x = Integer.parseInt(split[1]);
                     int z = Integer.parseInt(split[2]);

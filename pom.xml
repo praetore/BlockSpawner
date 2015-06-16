@@ -11,11 +11,6 @@
 
     <repositories>
         <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>http://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
             <id>sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
@@ -28,11 +23,6 @@
             <version>1.7.10</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/bukkit-1.7.10-R0.1-20140817.175650-8.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>ch.spacebase</groupId>
@@ -68,9 +58,9 @@
                     <encoding>UTF-8</encoding>
                     <verbose>true</verbose>
                     <fork>true</fork>
-                    <compilerVersion>1.7</compilerVersion>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <compilerVersion>1.6</compilerVersion>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
             <plugin>
