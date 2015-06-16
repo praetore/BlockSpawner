@@ -43,15 +43,20 @@ public class BlockSpawnCommand implements CommandExecutor{
                     int type = Integer.parseInt(split[0]);
 
                     Location currentLocation = new Location(world, x, y, z);
+					StringBuilder sb = new StringBuilder().
+						append("Placed ");
                     switch (type) {
                         case 1:
-                            worldEditor.placeBlocks(world, currentLocation, 1, bolder);
+                            worldEditor.getInstance().placeBlocks(world, currentLocation, 1, bolder);
+							sb.append("Bolder ");
                             break;
-                        case 2:
                         case 4:
-                            worldEditor.placeSchematic(world, currentLocation, paal);
+                            worldEditor.getInstance().placeSchematic(world, currentLocation, paal);
+							sb.append("Paal ");
                             break;
                     }
+					sb.append("at ").append("X: ").append(x).append(" Z: ").append(z);
+					player.chat(sb.toString());
                 }
             } catch (IOException e) {
                 return false;
