@@ -9,5 +9,10 @@ public interface ResourceFiles {
     String PAALSCHEMATICPATH = "plugins" + File.separator + "WorldEdit" +
             File.separator + "schematics" + File.separator + "paal.schematic";
 
+    String SILOSCHEMATICPATH = "plugins" + File.separator + "WorldEdit" +
+            File.separator + "schematics" + File.separator + "pointytower.schematic";
+
     String DATAPOINTS = "datapoints.csv";
+
+    String SILOPOINTS = "silo-points.csv";
 }

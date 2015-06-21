@@ -7,6 +7,10 @@ commands:
     aliases: [p]
     description: Place wooden blocks according to set coordinates
     usage: Type /placeblocks
+  placesilos:
+    aliases: [s]
+    description: Place silo's according to set coordinates
+    usage: Type /placesilos
   testplacement:
     aliases: [c]
     description: Place wooden blocks next to the players location
