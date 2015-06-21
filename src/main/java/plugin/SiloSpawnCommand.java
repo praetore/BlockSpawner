@@ -1,7 +1,6 @@
 package plugin;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,7 +29,6 @@ public class SiloSpawnCommand implements CommandExecutor {
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream));
             try {
-                Material bolder = Material.ANVIL;
                 Schematic paal = WorldEditor.getInstance().loadSchematic(new File(SILOSCHEMATICPATH));
 
                 while (bufferedReader.ready()) {
