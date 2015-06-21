@@ -15,7 +15,7 @@ import static plugin.ResourceFiles.SILOSCHEMATICPATH;
  * Created by darryl on 21-6-15.
  */
 public class SiloSpawnCommand implements CommandExecutor {
-    private java.io.InputStream inputstream;
+    private InputStream inputstream;
 
     public SiloSpawnCommand(InputStream inputstream) {
         this.inputstream = inputstream;
@@ -27,9 +27,10 @@ public class SiloSpawnCommand implements CommandExecutor {
             Player player = (Player) commandSender;
             World world = player.getWorld();
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream));
+            InputStreamReader streamReader = new InputStreamReader(inputstream);
+            BufferedReader bufferedReader = new BufferedReader(streamReader);
             try {
-                Schematic paal = WorldEditor.getInstance().loadSchematic(new File(SILOSCHEMATICPATH));
+                Schematic schematic = WorldEditor.getInstance().loadSchematic(new File(SILOSCHEMATICPATH));
 
                 while (bufferedReader.ready()) {
                     String line = bufferedReader.readLine();
@@ -39,8 +40,12 @@ public class SiloSpawnCommand implements CommandExecutor {
                     int y = world.getHighestBlockYAt(x, z);
 
                     Location currentLocation = new Location(world, x, y, z);
-                    WorldEditor.getInstance().placeSchematic(world, currentLocation, paal);
-                    player.chat("Placed " + "silo " + "at " + "X: " + x + " Y: " + y + " Z: " + z);
+                    try {
+                        WorldEditor.getInstance().placeSchematic(world, currentLocation, schematic);
+                        player.chat("Placed silo at X: " + x + " Y: " + y + " Z: " + z);
+                    } catch (NullPointerException ignored) {
+
+                    }
                 }
             } catch (IOException e) {
                 return false;

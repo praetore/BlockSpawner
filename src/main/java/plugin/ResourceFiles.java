@@ -14,5 +14,5 @@ public interface ResourceFiles {
 
     String DATAPOINTS = "datapoints.csv";
 
-    String SILOPOINTS = "silo-points.csv";
+    String SILOPOINTS = "silopoints.csv";
 }

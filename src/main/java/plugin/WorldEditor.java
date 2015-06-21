@@ -48,7 +48,13 @@ public class WorldEditor {
                 for (int z = 0; z < length; ++z) {
                     int index = y * width * length + z * width + x;
                     Block block = new Location(world, x + location.getX(), y + location.getY(), z + location.getZ()).getBlock();
-                    block.setTypeIdAndData(blocks[index], blockData[index], true);
+                    try {
+                        byte block_by_idx = blocks[index];
+                        byte block_data = blockData[index];
+                        block.setTypeIdAndData(block_by_idx, block_data, true);
+                    } catch (NullPointerException e) {
+                        throw new NullPointerException(e.getMessage());
+                    }
                 }
             }
         }

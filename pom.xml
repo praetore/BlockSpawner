@@ -48,7 +48,7 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>plugin.yml</include>
-                    <include>datapoints.csv</include>
+                    <include>*.csv</include>
                 </includes>
             </resource>
         </resources>
