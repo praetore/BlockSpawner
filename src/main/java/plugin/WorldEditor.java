@@ -54,7 +54,7 @@ public class WorldEditor {
     public void place(World world, Location location, String key) {
         if (schematics.containsKey(key)) {
             placeSchematic(world, location, schematics.get(key));
-        } else {
+        } else if (materials.containsKey(key)) {
             placeBlocks(world, location, 1, materials.get(key));
         }
     }
