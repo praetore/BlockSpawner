@@ -27,10 +27,9 @@ public class WorldEditor {
         this.logger = plugin.getLogger();
         schematics = new HashMap<String, Schematic>();
         materials = new HashMap<String, Material>();
-        ResourceFiles files = new ResourceFiles();
 
-        for (String key : files.SCHEMATICS.keySet()) {
-            Object entry = files.SCHEMATICS.get(key);
+        for (String key : ResourceFiles.getInstance().SCHEMATICS.keySet()) {
+            Object entry = ResourceFiles.getInstance().SCHEMATICS.get(key);
             if (entry instanceof String) {
                 String schematic = (String) entry;
                 if (!schematic.equals("")) {
@@ -40,7 +39,7 @@ public class WorldEditor {
                         logger.info(key + " loaded");
                     } catch (IOException e) {
                         logger.severe("Error loading " + key);
-                        e.printStackTrace();
+                        logger.severe(e.toString());
                     }
                 }
             } else if (entry instanceof Material) {
@@ -86,6 +85,7 @@ public class WorldEditor {
                         byte block_data = blockData[index];
                         block.setTypeIdAndData(block_by_idx, block_data, true);
                     } catch (NullPointerException e) {
+                        logger.severe(e.getMessage());
                         throw new NullPointerException(e.getMessage());
                     }
                 }

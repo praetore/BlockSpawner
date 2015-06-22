@@ -15,15 +15,23 @@ public class ResourceFiles {
             File.separator + "schematics" + File.separator;
 
     public Map<String, Object> SCHEMATICS;
+    private static ResourceFiles instance = null;
 
-    public ResourceFiles() {
-        Map<String, Object> schematicsFiles = new HashMap<String, Object>();
-        schematicsFiles.put("Aanlegplaats", "");
-        schematicsFiles.put("Afmeerboei", "");
-        schematicsFiles.put("Bolder", Material.ANVIL);
-        schematicsFiles.put("Kleine Silo", "smallsilo");
-        schematicsFiles.put("Meerpaal", "paal");
-        schematicsFiles.put("Silo", "closedtank2");
-        this.SCHEMATICS = schematicsFiles;
+    private ResourceFiles() {
+        Map<String, Object> schematics = new HashMap<String, Object>();
+        schematics.put("Aanlegplaats", "");
+        schematics.put("Afmeerboei", "");
+        schematics.put("Bolder", Material.ANVIL);
+        schematics.put("Kleine Silo", "smallsilo");
+        schematics.put("Meerpaal", "paal");
+        schematics.put("Silo", "closedtank");
+        SCHEMATICS = schematics;
+    }
+
+    public static ResourceFiles getInstance() {
+        if (instance == null) {
+            instance = new ResourceFiles();
+        }
+        return instance;
     }
 }

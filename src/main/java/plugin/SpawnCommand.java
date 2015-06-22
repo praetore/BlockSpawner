@@ -25,7 +25,6 @@ public class SpawnCommand implements CommandExecutor {
     public SpawnCommand(Plugin plugin) {
         this.plugin = plugin;
         logger = plugin.getLogger();
-        logger.info("Placement command initialized");
         inputstream = plugin.getResource(ResourceFiles.DATAPOINTS);
     }
 
@@ -37,7 +36,6 @@ public class SpawnCommand implements CommandExecutor {
 
             InputStreamReader streamReader = new InputStreamReader(inputstream);
             BufferedReader bufferedReader = new BufferedReader(streamReader);
-            logger.info("Datafile loaded!");
 
             WorldEditor instance = new WorldEditor(plugin);
             try {
@@ -50,13 +48,12 @@ public class SpawnCommand implements CommandExecutor {
                     int y = world.getHighestBlockYAt(x, z);
 
                     Location currentLocation = new Location(world, x, y, z);
-                    logger.info("Location loaded");
                     try {
                         instance.place(world, currentLocation, type);
                         String msg = "Placed " + type + " at X: " + x + " Y: " + y + " Z: " + z;
                         logger.info(msg);
                     } catch (NullPointerException e) {
-                        logger.severe("Error placing building");
+                        logger.severe("Error placing " + type);
                     }
                 }
             } catch (IOException e) {
