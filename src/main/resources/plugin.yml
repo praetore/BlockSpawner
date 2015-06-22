@@ -3,14 +3,10 @@ version: 0.2
 main: plugin.CommandManager
 description: Spawn game objects across the map
 commands:
-  placeblocks:
+  placebuildings:
     aliases: [p]
     description: Place wooden blocks according to set coordinates
     usage: Type /placeblocks
-  placesilos:
-    aliases: [s]
-    description: Place silo's according to set coordinates
-    usage: Type /placesilos
   testplacement:
     aliases: [c]
     description: Place wooden blocks next to the players location

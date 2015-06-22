@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,8 +18,30 @@ import java.util.Map;
  */
 public class WorldEditor {
     private static WorldEditor instance = null;
+    private final Map<String, Schematic> schematics;
+    private final HashMap<String, Material> materials;
 
     private WorldEditor() {
+        schematics = new HashMap<String, Schematic>();
+        materials = new HashMap<String, Material>();
+
+        for (String key : ResourceFiles.SCHEMATICS.keySet()) {
+            Object entry = ResourceFiles.SCHEMATICS.get(key);
+            if (entry instanceof String) {
+                String schematic = (String) entry;
+                if (!schematic.equals("")) {
+                    String path = ResourceFiles.BASEPATH + schematic + ".schematic";
+                    try {
+                        schematics.put(key, loadSchematic(new File(path)));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (entry instanceof Material) {
+                Material material = (Material) entry;
+                materials.put(key, material);
+            }
+        }
     }
 
     public static WorldEditor getInstance() {
@@ -26,6 +49,14 @@ public class WorldEditor {
             instance = new WorldEditor();
         }
         return instance;
+    }
+
+    public void place(World world, Location location, String key) {
+        if (schematics.containsKey(key)) {
+            placeSchematic(world, location, schematics.get(key));
+        } else {
+            placeBlocks(world, location, 1, materials.get(key));
+        }
     }
 
     public void placeBlocks(World world, Location location, int numBlocks, Material material) {

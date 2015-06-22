@@ -1,18 +1,28 @@
 package plugin;
 
+import org.bukkit.Material;
+
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by darryl on 16-6-15.
  */
-public interface ResourceFiles {
-    String PAALSCHEMATICPATH = "plugins" + File.separator + "WorldEdit" +
-            File.separator + "schematics" + File.separator + "paal.schematic";
+public class ResourceFiles {
+    static String DATAPOINTS = "points.csv";
+    static String BASEPATH = "plugins" + File.separator + "WorldEdit" +
+            File.separator + "schematics" + File.separator;
+    static Map<String, Object> SCHEMATICS;
 
-    String SILOSCHEMATICPATH = "plugins" + File.separator + "WorldEdit" +
-            File.separator + "schematics" + File.separator + "pointytower.schematic";
-
-    String DATAPOINTS = "datapoints.csv";
-
-    String SILOPOINTS = "silopoints.csv";
+    public ResourceFiles() {
+        Map<String, Object> schematicsFiles = new HashMap<String, Object>();
+        schematicsFiles.put("Aanlegplaats", "");
+        schematicsFiles.put("Afmeerboei", "");
+        schematicsFiles.put("Bolder", Material.ANVIL);
+        schematicsFiles.put("Kleine Silo", "minisilo");
+        schematicsFiles.put("Meerpaal", "paal");
+        schematicsFiles.put("Silo", "closedtank2");
+        ResourceFiles.SCHEMATICS = schematicsFiles;
+    }
 }
