@@ -11,7 +11,7 @@ public class CommandManager extends JavaPlugin {
     @Override
     public void onEnable() {
         getCommand("placebuildings").setExecutor(new SpawnCommand(this));
-        getCommand("testplacement").setExecutor(new PlacementTestCommand());
-        getCommand("testschematic").setExecutor(new SchematicTestCommand());
+        getCommand("testplacement").setExecutor(new PlacementTestCommand(this));
+        getCommand("testschematic").setExecutor(new SchematicTestCommand(this));
     }
 }
