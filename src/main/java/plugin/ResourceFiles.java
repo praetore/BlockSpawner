@@ -10,10 +10,10 @@ import java.util.Map;
  * Created by darryl on 16-6-15.
  */
 public class ResourceFiles {
-    static String DATAPOINTS = "points.csv";
-    static String BASEPATH = "plugins" + File.separator + "WorldEdit" +
+    public static String DATAPOINTS = "points.csv";
+    public static String BASEPATH = "plugins" + File.separator + "WorldEdit" +
             File.separator + "schematics" + File.separator;
-    static Map<String, Object> SCHEMATICS;
+    public static Map<String, Object> SCHEMATICS;
 
     public ResourceFiles() {
         Map<String, Object> schematicsFiles = new HashMap<String, Object>();
