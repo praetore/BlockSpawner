@@ -5,13 +5,13 @@ description: Spawn game objects across the map
 commands:
   placebuildings:
     aliases: [p]
-    description: Place wooden blocks according to set coordinates
-    usage: Type /placeblocks
+    description: Place buildings according to set coordinates
+    usage: Type /placebuildings
   testplacement:
     aliases: [c]
-    description: Place wooden blocks next to the players location
+    description: Place an anvil in the map next to the players location
     usage: Type /testplacement
   testschematic:
     aliases: [s]
-    description: Place a schematic in the map
+    description: Place a schematic in the map next to the players location
     usage: Type /testschematic
