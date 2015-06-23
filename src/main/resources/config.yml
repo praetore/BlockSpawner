@@ -1,0 +1,8 @@
+# TODO: Externalize this data
+schematics:
+  Kleine Silo: smallsilo.schematic
+  Meerpaal: paal.schematic
+  Silo: closedtank.schematic
+blocks:
+  Bolder: ANVIL
+datafile: points.csv

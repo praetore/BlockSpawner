@@ -1,17 +1,11 @@
-name: BlockSpawner
-version: 0.2
-main: plugin.CommandManager
+name: WorldBuilder
+version: 1.0-SNAPSHOT
+main: plugin.PluginManager
 description: Spawn game objects across the map
 commands:
   placebuildings:
-    aliases: [p]
-    description: Place buildings according to set coordinates
+    description: Place buildings according to Minecraft coordinates from data-file
     usage: Type /placebuildings
-  testplacement:
-    aliases: [c]
-    description: Place an anvil in the map next to the players location
-    usage: Type /testplacement
-  testschematic:
-    aliases: [s]
-    description: Place a schematic in the map next to the players location
-    usage: Type /testschematic
+  availablebuildings:
+    description: Show available blocks and schematics that can be placed
+    usage: Type /availablebuildings

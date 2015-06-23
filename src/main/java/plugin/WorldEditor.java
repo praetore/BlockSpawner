@@ -6,12 +6,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -19,44 +17,29 @@ import java.util.logging.Logger;
  * Created by darryl on 9-6-15.
  */
 public class WorldEditor {
-    private Map<String, Schematic> schematics;
-    private HashMap<String, Material> materials;
+    private static WorldEditor instance = null;
     private Logger logger;
+    private PluginManager plugin;
 
-    public WorldEditor(Plugin plugin) {
+    private WorldEditor(PluginManager plugin) {
+        this.plugin = plugin;
         this.logger = plugin.getLogger();
-        schematics = new HashMap<String, Schematic>();
-        materials = new HashMap<String, Material>();
+    }
 
-        for (String key : ResourceFiles.getInstance().SCHEMATICS.keySet()) {
-            Object entry = ResourceFiles.getInstance().SCHEMATICS.get(key);
-            if (entry instanceof String) {
-                String schematic = (String) entry;
-                if (!schematic.equals("")) {
-                    String path = ResourceFiles.BASEPATH + schematic + ".schematic";
-                    try {
-                        schematics.put(key, loadSchematic(new File(path)));
-                        logger.info(key + " loaded");
-                    } catch (IOException e) {
-                        logger.severe("Error loading " + key);
-                        logger.severe(e.toString());
-                    }
-                }
-            } else if (entry instanceof Material) {
-                Material material = (Material) entry;
-                materials.put(key, material);
-            }
+    public static WorldEditor getInstance(PluginManager plugin) {
+        if (instance == null) {
+            instance = new WorldEditor(plugin);
         }
-        logger.info("WorldEditor initialized");
+        return instance;
     }
 
     public void place(World world, Location location, String key) {
-        if (schematics.containsKey(key)) {
+        if (plugin.SCHEMATICS.containsKey(key)) {
             logger.info("Placing schematic " + key);
-            placeSchematic(world, location, schematics.get(key));
-        } else if (materials.containsKey(key)) {
+            placeSchematic(world, location, plugin.SCHEMATICS.get(key));
+        } else if (plugin.BLOCKS.containsKey(key)) {
             logger.info("Placing Material " + key);
-            placeBlocks(world, location, 1, materials.get(key));
+            placeBlocks(world, location, 1, plugin.BLOCKS.get(key));
         }
     }
 
@@ -117,7 +100,7 @@ public class WorldEditor {
 
         byte[] blocks = getChildTag(schematic, "Blocks", ByteArrayTag.class).getValue();
         byte[] blockData = getChildTag(schematic, "Data", ByteArrayTag.class).getValue();
-        return new Schematic(blocks, blockData, width, length, height);
+        return new Schematic(blocks, blockData, width, length, height, file.getName());
     }
 
     /**

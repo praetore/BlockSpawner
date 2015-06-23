@@ -6,7 +6,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,13 +18,14 @@ import java.util.logging.Logger;
  */
 public class SpawnCommand implements CommandExecutor {
     private Logger logger;
-    private Plugin plugin;
+    private PluginManager plugin;
     private InputStream inputstream;
 
-    public SpawnCommand(Plugin plugin) {
+    public SpawnCommand(PluginManager plugin) {
         this.plugin = plugin;
         logger = plugin.getLogger();
-        inputstream = plugin.getResource(ResourceFiles.DATAPOINTS);
+        String datafile = plugin.getConfig().getString("datafile");
+        inputstream = plugin.getResource(datafile);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SpawnCommand implements CommandExecutor {
             InputStreamReader streamReader = new InputStreamReader(inputstream);
             BufferedReader bufferedReader = new BufferedReader(streamReader);
 
-            WorldEditor instance = new WorldEditor(plugin);
+            WorldEditor instance = WorldEditor.getInstance(plugin);
             try {
                 while (bufferedReader.ready()) {
                     String line = bufferedReader.readLine();

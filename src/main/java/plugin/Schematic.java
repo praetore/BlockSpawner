@@ -4,19 +4,21 @@ package plugin;
  * Created by darryl on 9-6-15.
  */
 public class Schematic {
+    protected String filename;
     private byte[] blocks;
     private byte[] data;
     private short width;
     private short lenght;
     private short height;
 
-    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height)
+    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, String filename)
     {
         this.blocks = blocks;
         this.data = data;
         this.width = width;
         this.lenght = lenght;
         this.height = height;
+        this.filename = filename;
     }
 
     /**
@@ -57,5 +59,9 @@ public class Schematic {
     public short getHeight()
     {
         return height;
+    }
+
+    public String getFilename() {
+        return filename;
     }
 }
