@@ -1,6 +1,9 @@
 package plugin;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -75,5 +78,12 @@ public class PluginManager extends JavaPlugin {
 
         getCommand("placebuildings").setExecutor(new SpawnCommand(this));
         getCommand("availablebuildings").setExecutor(new AvailabilityCommand(this));
+        getCommand("removebuildings").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                LocationIndexer.getInstance(PluginManager.this).clearLocations();
+                return true;
+            }
+        });
     }
 }
