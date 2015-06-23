@@ -1,8 +1,7 @@
-# TODO: Externalize this data
-schematics:
-  Kleine Silo: smallsilo.schematic
-  Meerpaal: paal.schematic
-  Silo: closedtank.schematic
-blocks:
-  Bolder: ANVIL
-datafile: points.csv
+data:
+  header: true
+  filename: data.csv
+#schematics:
+#  Type of building (reference to datafile): file.schematic
+#blocks:
+#  Type of building (reference to datafile): Name of Material (like ANVIL, for example)
