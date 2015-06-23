@@ -46,7 +46,7 @@ public class PluginManager extends JavaPlugin {
                 try {
                     File file = new File(getDataFolder(), dataFilePath);
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-                    writer.write("lat,long,type");
+                    writer.write("x,z,type");
                     writer.close();
                     DATAFILE = file;
                 } catch (IOException e) {
