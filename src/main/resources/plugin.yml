@@ -9,3 +9,6 @@ commands:
   availablebuildings:
     description: Show available blocks and schematics that can be placed
     usage: Type /availablebuildings
+  removebuildings:
+    description: Remove building that are placed during his session
+    usage: Type /removebuildings
