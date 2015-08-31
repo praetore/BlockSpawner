@@ -60,79 +60,20 @@ public class WorldEditor {
         short width = schematic.getWidth();
         short height = schematic.getHeight();
 
-        if (direction.equals("north")) {
-            for (int x = 0; x < width; ++x) {
-                for (int y = 0; y < height; ++y) {
-                    for (int z = 0; z < length; ++z) {
-                        int index = y * width * length + z * width + x;
-                        Location blockLocation = new Location(world, x + location.getX(), y + location.getY(), z + location.getZ());
-                        Block block = blockLocation.getBlock();
-                        try {
-                            byte block_by_idx = blocks[index];
-                            byte block_data = blockData[index];
-                            block.setTypeIdAndData(block_by_idx, block_data, true);
-                            LocationIndexer.getInstance(plugin).addLocation(blockLocation);
-                        } catch (NullPointerException e) {
-                            logger.severe(e.getMessage());
-                            throw new NullPointerException(e.getMessage());
-                        }
-                    }
-                }
-            }
-        } else if (direction.equals("south")) {
-            for (int x = 0; x < width; ++x) {
-                for (int y = 0; y < height; ++y) {
-                    for (int z = length; z > 0; --z) {
-                        int index = y * width * length + z * width + x;
-                        Location blockLocation = new Location(world, x + location.getX(), y + location.getY(), z + location.getZ());
-                        Block block = blockLocation.getBlock();
-                        try {
-                            byte block_by_idx = blocks[index];
-                            byte block_data = blockData[index];
-                            block.setTypeIdAndData(block_by_idx, block_data, true);
-                            LocationIndexer.getInstance(plugin).addLocation(blockLocation);
-                        } catch (NullPointerException e) {
-                            logger.severe(e.getMessage());
-                            throw new NullPointerException(e.getMessage());
-                        }
-                    }
-                }
-            }
-        } else if (direction.equals("west")) {
-            for (int x = width; x > 0; --x) {
-                for (int y = 0; y < height; ++y) {
-                    for (int z = 0; z < length; ++z) {
-                        int index = y * width * length + z * width + x;
-                        Location blockLocation = new Location(world, x + location.getX(), y + location.getY(), z + location.getZ());
-                        Block block = blockLocation.getBlock();
-                        try {
-                            byte block_by_idx = blocks[index];
-                            byte block_data = blockData[index];
-                            block.setTypeIdAndData(block_by_idx, block_data, true);
-                            LocationIndexer.getInstance(plugin).addLocation(blockLocation);
-                        } catch (NullPointerException e) {
-                            logger.severe(e.getMessage());
-                            throw new NullPointerException(e.getMessage());
-                        }
-                    }
-                }
-            }
-        } else if (direction.equals("east")) {
-            for (int x = width; x > 0; --x) {
-                for (int y = 0; y < height; ++y) {
-                    for (int z = length; z > 0; --z) {
-                        int index = y * width * length + z * width + x;
-                        Location blockLocation = new Location(world, x + location.getX(), y + location.getY(), z + location.getZ());
-                        Block block = blockLocation.getBlock();
-                        try {
-                            byte block_by_idx = blocks[index];
-                            byte block_data = blockData[index];
-                            block.setTypeIdAndData(block_by_idx, block_data, true);
-                            LocationIndexer.getInstance(plugin).addLocation(blockLocation);
-                        } catch (NullPointerException e) {
-                            logger.severe(e.getMessage());
-                            throw new NullPointerException(e.getMessage());
-                        }
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                for (int z = 0; z < length; ++z) {
+                    int index = y * width * length + z * width + x;
+                    Location blockLocation = new Location(world, x + location.getX(), y + location.getY(), z + location.getZ());
+                    Block block = blockLocation.getBlock();
+                    try {
+                        byte block_by_idx = blocks[index];
+                        byte block_data = blockData[index];
+                        block.setTypeIdAndData(block_by_idx, block_data, true);
+                        LocationIndexer.getInstance(plugin).addLocation(blockLocation);
+                    } catch (NullPointerException e) {
+                        logger.severe(e.getMessage());
+                        throw new NullPointerException(e.getMessage());
                     }
                 }
             }

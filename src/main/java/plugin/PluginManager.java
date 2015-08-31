@@ -33,39 +33,41 @@ public class PluginManager extends JavaPlugin {
 
         HEADER_PRESENT = getConfig().getConfigurationSection("data").getBoolean("header");
 
-        String dataFilePath = getConfig().getConfigurationSection("data").getString("filename");
-        if (!new File(getDataFolder(), dataFilePath).exists()) {
+        String dataFileName = getConfig().getConfigurationSection("data").getString("filename");
+        File dataFilePath = new File(getDataFolder(), dataFileName);
+        if (!dataFilePath.exists()) {
             boolean success = false;
 
             try {
-                success = new File(getDataFolder(), dataFilePath).createNewFile();
+                success = new File(getDataFolder(), dataFileName).createNewFile();
             } catch (IOException e) {
-                getLogger().severe("Failed to create " + dataFilePath);
+                getLogger().severe("Failed to create " + dataFileName);
             }
 
             if (!success) {
-                getLogger().severe("Failed to create " + dataFilePath);
-            } else {
-                try {
-                    File file = new File(getDataFolder(), dataFilePath);
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-                    writer.write("x,z,type");
-                    writer.close();
-                    DATAFILE = file;
-                } catch (IOException e) {
-                    getLogger().severe("Cannot write to " + dataFilePath);
-                }
+                getLogger().severe("Failed to create " + dataFileName);
             }
+        }
+
+        try {
+            File file = new File(getDataFolder(), dataFileName);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+            writer.write("x,z,type");
+            writer.close();
+            DATAFILE = file;
+        } catch (IOException e) {
+            getLogger().severe("Cannot write to " + dataFileName);
         }
 
         try {
             Map<String, Object> schematics = getConfig().getConfigurationSection("schematics").getValues(false);
             for (Map.Entry<String, Object> entry : schematics.entrySet()) {
+                File path = new File(getDataFolder() + File.separator + "schematics",
+                        (String) entry.getValue());
                 try {
-                    File path = new File(getDataFolder(), (String) entry.getValue());
                     SCHEMATICS.put(entry.getKey(), WorldEditor.getInstance(this).loadSchematic(path));
                 } catch (IOException e) {
-                    getLogger().severe("Cannot load " + entry.getValue());
+                    getLogger().severe("Cannot load " + entry.getValue() + " from " + path);
                 }
             }
 
