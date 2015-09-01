@@ -6,10 +6,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.la4j.Matrix;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -35,8 +38,8 @@ public class WorldEditor {
 
     public void place(World world, Location location, String key, String direction) {
         if (plugin.SCHEMATICS.containsKey(key)) {
-            logger.info("Placing schematic " + key);
-            placeSchematic(world, location, plugin.SCHEMATICS.get(key), direction);
+            logger.info("Placing schematic " + key + " in direction " + direction);
+            placeSchematicOld(world, location, plugin.SCHEMATICS.get(key), direction);
         } else if (plugin.BLOCKS.containsKey(key)) {
             logger.info("Placing Material " + key);
             placeBlocks(world, location, 1, plugin.BLOCKS.get(key));
@@ -60,23 +63,99 @@ public class WorldEditor {
         short width = schematic.getWidth();
         short height = schematic.getHeight();
 
+        List<double[][]> mats = new ArrayList<double[][]>();
+        for (int x = 0; x < width; ++x) {
+            double[][] mat = new double[height][length];
+            for (int y = 0; y < height; ++y) {
+                for (int z = 0; z < length; ++z) {
+                    int index = y * width * length + z * width + x;
+                    mat[y][z] = index;
+                }
+            }
+            mats.add(mat);
+        }
+
+        List<Double> nums = new ArrayList<Double>();
+        for (double[][] mat : mats) {
+            Matrix matrix = getRotatedMatrix(mat, direction);
+            for (int i = 0; i < matrix.rows(); i++) {
+                for (int j = 0; j < matrix.columns(); j++) {
+                    nums.add(matrix.get(i, j));
+                }
+            }
+        }
+
+        int index = 0;
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                for (int z = 0; z < length; ++z) {
+                    placeSchematicBlock(new Location(world,
+                            x + location.getX(),
+                            y + location.getY(),
+                            z + location.getZ()),
+                            blocks[(int) nums.get(index).doubleValue()],
+                            blockData[(int) nums.get(index).doubleValue()]);
+                    index++;
+                }
+            }
+        }
+    }
+
+    private void placeSchematicOld(World world, Location location, Schematic schematic, String direction) {
+        byte[] blocks = schematic.getBlocks();
+        byte[] blockData = schematic.getData();
+
+        short length = schematic.getLenght();
+        short width = schematic.getWidth();
+        short height = schematic.getHeight();
+
+        List<Integer> lognums = new ArrayList<Integer>();
+
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 for (int z = 0; z < length; ++z) {
                     int index = y * width * length + z * width + x;
-                    Location blockLocation = new Location(world, x + location.getX(), y + location.getY(), z + location.getZ());
-                    Block block = blockLocation.getBlock();
                     try {
-                        byte block_by_idx = blocks[index];
-                        byte block_data = blockData[index];
-                        block.setTypeIdAndData(block_by_idx, block_data, true);
-                        LocationIndexer.getInstance(plugin).addLocation(blockLocation);
+                        placeSchematicBlock(new Location(world,
+                                        x + location.getX(),
+                                        y + location.getY(),
+                                        z + location.getZ()),
+                                blocks[index],
+                                blockData[index]);
+                        lognums.add(index);
                     } catch (NullPointerException e) {
-                        logger.severe(e.getMessage());
-                        throw new NullPointerException(e.getMessage());
+                        plugin.getLogger().severe("Placement of block failed at index " + index);
                     }
                 }
             }
+        }
+        String out = "";
+        for (Integer lognum : lognums) {
+            out += lognum + " ";
+        }
+        plugin.getLogger().info(out);
+    }
+
+    private Matrix getRotatedMatrix(double[][] mat, String direction) {
+        if (direction.equals("west")) {
+            return Matrix.from2DArray(mat).rotate();
+        } else if (direction.equals("south")) {
+            return Matrix.from2DArray(mat).rotate().rotate();
+        } else if (direction.equals("east")) {
+            return Matrix.from2DArray(mat).rotate().rotate().rotate();
+        } else {
+            return Matrix.from2DArray(mat);
+        }
+    }
+
+    private void placeSchematicBlock(Location location, byte block1, byte b) {
+        Block block = location.getBlock();
+        try {
+            block.setTypeIdAndData(block1, b, true);
+            LocationIndexer.getInstance(plugin).addLocation(location);
+        } catch (NullPointerException e) {
+            logger.severe(e.getMessage());
+            throw new NullPointerException(e.getMessage());
         }
     }
 

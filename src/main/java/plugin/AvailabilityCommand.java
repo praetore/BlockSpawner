@@ -23,14 +23,15 @@ public class AvailabilityCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         Map<String, Schematic> schematics = plugin.SCHEMATICS;
+        int count = 0;
         for (Map.Entry<String, Schematic> entry : schematics.entrySet()) {
-            logger.info(entry.getKey() + ": " + entry.getValue().getFilename());
+            logger.info(count + ": " + entry.getKey() + ": " + entry.getValue().getFilename());
+            count++;
         }
 
         Map<String, Material> blocks = plugin.BLOCKS;
-        for (Map.Entry<String, Material> entry : blocks.entrySet()) {
+        for (Map.Entry<String, Material> entry : blocks.entrySet())
             logger.info(entry.getKey() + ": " + entry.getValue().name());
-        }
         return true;
     }
 }

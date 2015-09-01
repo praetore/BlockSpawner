@@ -4,8 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -13,12 +13,12 @@ import java.util.logging.Logger;
  */
 public class LocationIndexer {
     private final Logger logger;
-    private Queue<Location> indexedLocations;
+    private List<Location> indexedLocations;
     private static LocationIndexer instance;
 
     private LocationIndexer(Plugin plugin) {
         logger = plugin.getLogger();
-        indexedLocations = new PriorityQueue<Location>();
+        indexedLocations = new ArrayList<Location>();
     }
 
     public static LocationIndexer getInstance(Plugin plugin) {
@@ -34,8 +34,7 @@ public class LocationIndexer {
 
     public void clearLocations() {
         if (indexedLocations.size() > 0) {
-            for (int i = 0; i < indexedLocations.size(); i++) {
-                Location location = indexedLocations.remove();
+            for (Location location : indexedLocations) {
                 location.getBlock().setType(Material.AIR);
             }
         } else {

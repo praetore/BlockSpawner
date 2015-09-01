@@ -32,6 +32,11 @@
             <artifactId>opennbt</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.la4j</groupId>
+            <artifactId>la4j</artifactId>
+            <version>0.5.5</version>
+        </dependency>
     </dependencies>
 
     <build>

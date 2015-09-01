@@ -1,9 +1,12 @@
 package plugin;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -66,6 +69,7 @@ public class PluginManager extends JavaPlugin {
                         (String) entry.getValue());
                 try {
                     SCHEMATICS.put(entry.getKey(), WorldEditor.getInstance(this).loadSchematic(path));
+                    getLogger().info("Loaded up " + entry.getKey());
                 } catch (IOException e) {
                     getLogger().severe("Cannot load " + entry.getValue() + " from " + path);
                 }
@@ -74,10 +78,35 @@ public class PluginManager extends JavaPlugin {
             Map<String, Object> blocks = getConfig().getConfigurationSection("blocks").getValues(false);
             for (Map.Entry<String, Object> entry : blocks.entrySet()) {
                 BLOCKS.put(entry.getKey(), Material.valueOf((String) entry.getValue()));
+                getLogger().info("Loaded up " + entry.getKey());
             }
         } catch (NullPointerException ignored) {
         }
 
+        getCommand("testschematic").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String alias, String[] args) {
+                if (commandSender instanceof Player) {
+                    Player player = (Player) commandSender;
+                    Block block = player.getTargetBlock(null, 100);
+                    Location locationBlock = block.getLocation();
+                    String choice = args[0];
+                    if (choice != null) {
+                        String schematic = (String) SCHEMATICS.keySet().toArray()[Integer.parseInt(choice)];
+                        WorldEditor.getInstance(PluginManager.this)
+                                .place(player.getWorld(),
+                                        locationBlock,
+                                        schematic,
+                                        "north");
+                        return true;
+                    } else {
+                        player.chat("You must choose by picking a number from a schematic from /availablebuildings");
+                        return false;
+                    }
+                }
+                return false;
+            }
+        });
         getCommand("placebuildings").setExecutor(new SpawnCommand(this));
         getCommand("availablebuildings").setExecutor(new AvailabilityCommand(this));
         getCommand("removebuildings").setExecutor(new CommandExecutor() {

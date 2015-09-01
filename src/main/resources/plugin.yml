@@ -4,11 +4,14 @@ main: plugin.PluginManager
 description: Spawn game objects across the map
 commands:
   placebuildings:
-    description: Place buildings according to Minecraft coordinates from data-file
+    description: Place buildings according to Minecraft coordinates from csv-file
     usage: Type /placebuildings
   availablebuildings:
     description: Show available blocks and schematics that can be placed
     usage: Type /availablebuildings
   removebuildings:
-    description: Remove building that are placed during his session
+    description: Remove buildings that are placed during this session
     usage: Type /removebuildings
+  testschematic:
+    description: Test the placement and direction of a single schematic
+    usage: Type /testschematic
