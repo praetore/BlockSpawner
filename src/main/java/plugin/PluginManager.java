@@ -96,8 +96,8 @@ public class PluginManager extends JavaPlugin {
                         WorldEditor.getInstance(PluginManager.this)
                                 .place(player.getWorld(),
                                         locationBlock,
-                                        schematic,
-                                        "north");
+                                        schematic
+                                );
                         return true;
                     } else {
                         player.chat("You must choose by picking a number from a schematic from /availablebuildings");

@@ -42,11 +42,10 @@ public class SpawnCommand implements CommandExecutor {
                             int z = Integer.parseInt(split[1]);
                             String type = split[2];
                             int y = world.getHighestBlockYAt(x, z);
-                            String direction = split[3];
 
                             Location currentLocation = new Location(world, x, y, z);
                             try {
-                                instance.place(world, currentLocation, type, direction);
+                                instance.place(world, currentLocation, type);
                                 String msg = "Placed " + type + " at X: " + x + " Y: " + y + " Z: " + z;
                                 logger.info(msg);
                             } catch (NullPointerException e) {
