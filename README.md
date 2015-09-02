@@ -7,3 +7,6 @@ Get plugin jar by compiling with maven, type ```mvn install``` in repo dir.
 * Type ```/placebuildings``` in game to initialize block and schematic spawning
 * Type ```/availablebuildings``` to see the buildings and blocks that can be placed
 * Type ```/removebuildings``` to remove buildings that are placed during this session
+* Type ```/testschematic [index no]``` to place a single schematic in the direction a player is looking at, 
+where ```[index no]``` is the number associated with a schematic. Type  ```/availablebuildings``` for the 
+available index numbers belonging to a single schematic.
