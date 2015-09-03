@@ -34,6 +34,7 @@ public class WorldEditor {
     }
 
     public void place(World world, Location location, String key) {
+        logger.info("At X: " + location.getX() + " - Y:" + location.getY() +  " - Z:" + location.getZ());
         if (plugin.SCHEMATICS.containsKey(key)) {
             logger.info("Placing schematic " + key);
             placeSchematic(world, location, plugin.SCHEMATICS.get(key));
@@ -48,7 +49,7 @@ public class WorldEditor {
             location.setY(location.getY() + i);
             Block block = world.getBlockAt(location);
             block.setType(material);
-            LocationIndexer.getInstance(plugin).addLocation(location);
+            LocationIndexer.getInstance().addLocation(location);
         }
     }
 
@@ -59,6 +60,7 @@ public class WorldEditor {
         short length = schematic.getLenght();
         short width = schematic.getWidth();
         short height = schematic.getHeight();
+        int errorCount = 0;
 
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
@@ -72,15 +74,20 @@ public class WorldEditor {
                         Block block = blockLocation.getBlock();
                         try {
                             block.setTypeIdAndData(blocks[index], blockData[index], true);
-                            LocationIndexer.getInstance(plugin).addLocation(blockLocation);
+                            LocationIndexer.getInstance().addLocation(blockLocation);
                         } catch (NullPointerException e) {
                             throw new NullPointerException(e.getMessage());
                         }
                     } catch (NullPointerException e) {
-                        plugin.getLogger().severe("Placement of block failed at index " + index);
+                        errorCount++;
                     }
                 }
             }
+        }
+
+        if (errorCount > 0) {
+            logger.info(errorCount + " errors during the placement of " + schematic.getFilename() + "\n" +
+                    "This is probably because of a faulty block type in the schematic.");
         }
     }
 
