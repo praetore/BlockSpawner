@@ -1,16 +1,15 @@
 package plugin;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,7 +18,7 @@ import java.util.Map;
 public class PluginManager extends JavaPlugin {
     public final Map<String, Material> BLOCKS = new HashMap<String, Material>();
     public final HashMap<String, Schematic> SCHEMATICS = new HashMap<String, Schematic>();
-    public File DATAFILE;
+    public final List<Point> POINTS = new ArrayList<Point>();
     public boolean HEADER_PRESENT;
 
     @Override
@@ -38,30 +37,39 @@ public class PluginManager extends JavaPlugin {
 
         String dataFileName = getConfig().getConfigurationSection("data").getString("filename");
         File dataFilePath = new File(getDataFolder(), dataFileName);
+
         if (!dataFilePath.exists()) {
-            boolean success = false;
-
-            try {
-                success = new File(getDataFolder(), dataFileName).createNewFile();
-            } catch (IOException e) {
-                getLogger().severe("Failed to create " + dataFileName);
-            }
-
-            if (!success) {
-                getLogger().severe("Failed to create " + dataFileName);
-            }
+            getLogger().info("Datafile not found, generating template");
+            generateDatafileTemplate(dataFileName, dataFilePath);
+        } else {
+            readDataFile(dataFilePath);
         }
 
-        try {
-            File file = new File(getDataFolder(), dataFileName);
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-            writer.write("x,z,type");
-            writer.close();
-            DATAFILE = file;
-        } catch (IOException e) {
-            getLogger().severe("Cannot write to " + dataFileName);
-        }
+        indexSchematics();
+        indexBlocks();
 
+
+        getCommand("testschematic").setExecutor(new TestPlacementCommand(this));
+        getCommand("placebuildings").setExecutor(new SpawnCommand(this));
+        getCommand("availablebuildings").setExecutor(new AvailabilityCommand(this));
+        getCommand("removebuildings").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                LocationIndexer.getInstance(PluginManager.this).clearLocations();
+                return true;
+            }
+        });
+    }
+
+    private void indexBlocks() {
+        Map<String, Object> blocks = getConfig().getConfigurationSection("blocks").getValues(false);
+        for (Map.Entry<String, Object> entry : blocks.entrySet()) {
+            BLOCKS.put(entry.getKey(), Material.valueOf((String) entry.getValue()));
+            getLogger().info("Loaded up " + entry.getKey());
+        }
+    }
+
+    private void indexSchematics() {
         try {
             Map<String, Object> schematics = getConfig().getConfigurationSection("schematics").getValues(false);
             for (Map.Entry<String, Object> entry : schematics.entrySet()) {
@@ -74,47 +82,68 @@ public class PluginManager extends JavaPlugin {
                     getLogger().severe("Cannot load " + entry.getValue() + " from " + path);
                 }
             }
-
-            Map<String, Object> blocks = getConfig().getConfigurationSection("blocks").getValues(false);
-            for (Map.Entry<String, Object> entry : blocks.entrySet()) {
-                BLOCKS.put(entry.getKey(), Material.valueOf((String) entry.getValue()));
-                getLogger().info("Loaded up " + entry.getKey());
-            }
         } catch (NullPointerException ignored) {
         }
+    }
 
-        getCommand("testschematic").setExecutor(new CommandExecutor() {
-            @Override
-            public boolean onCommand(CommandSender commandSender, Command command, String alias, String[] args) {
-                if (commandSender instanceof Player) {
-                    Player player = (Player) commandSender;
-                    Block block = player.getTargetBlock(null, 100);
-                    Location locationBlock = block.getLocation();
-                    String choice = args[0];
-                    if (choice != null) {
-                        String schematic = (String) SCHEMATICS.keySet().toArray()[Integer.parseInt(choice)];
-                        WorldEditor.getInstance(PluginManager.this)
-                                .place(player.getWorld(),
-                                        locationBlock,
-                                        schematic
-                                );
-                        return true;
+    private void generateDatafileTemplate(String dataFileName, File dataFilePath) {
+        try {
+            boolean success = new File(getDataFolder(), dataFileName).createNewFile();
+            if (success) {
+                try {
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream(
+                                            dataFilePath
+                                    )
+                            )
+                    );
+                    writer.write("x,z,type");
+                    writer.close();
+                } catch (IOException e) {
+                    getLogger().severe("Cannot write to " + dataFileName);
+                }
+                getLogger().info("Template datafile has been created");
+            } else {
+                getLogger().severe("Failed to create " + dataFileName);
+            }
+        } catch (IOException e) {
+            getLogger().severe("Failed to create " + dataFileName);
+        }
+    }
+
+    private void readDataFile(File dataFilePath) {
+        try {
+            InputStreamReader streamReader = new InputStreamReader(new FileInputStream(dataFilePath));
+            BufferedReader bufferedReader = new BufferedReader(streamReader);
+            boolean header = HEADER_PRESENT;
+            try {
+                while (bufferedReader.ready()) {
+                    String line = bufferedReader.readLine();
+                    if (!header) {
+                        String[] split = line.split(",");
+                        int x = 0;
+                        int z = 0;
+                        try {
+                            x = Integer.parseInt(split[0]);
+                            z = Integer.parseInt(split[1]);
+                        } catch (NumberFormatException e) {
+                            getLogger().severe("Unable to format" + split[0] + " or " + split[1]);
+                        }
+                        String type = split[2];
+
+                        Point point = new Point(x, z, type);
+                        POINTS.add(point);
                     } else {
-                        player.chat("You must choose by picking a number from a schematic from /availablebuildings");
-                        return false;
+                        header = false;
                     }
                 }
-                return false;
+                getLogger().info(POINTS.size() + " points have been indexed");
+            } catch (IOException e) {
+                getLogger().severe("Can't read datafile");
             }
-        });
-        getCommand("placebuildings").setExecutor(new SpawnCommand(this));
-        getCommand("availablebuildings").setExecutor(new AvailabilityCommand(this));
-        getCommand("removebuildings").setExecutor(new CommandExecutor() {
-            @Override
-            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-                LocationIndexer.getInstance(PluginManager.this).clearLocations();
-                return true;
-            }
-        });
+        } catch (FileNotFoundException e) {
+            getLogger().severe("Can't find datafile");
+        }
     }
 }

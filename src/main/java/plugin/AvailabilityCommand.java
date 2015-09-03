@@ -32,6 +32,8 @@ public class AvailabilityCommand implements CommandExecutor {
             Map<String, Material> blocks = plugin.BLOCKS;
             for (Map.Entry<String, Material> entry : blocks.entrySet())
                 player.chat(entry.getKey() + ": " + entry.getValue().name());
+
+            player.chat(plugin.POINTS.size() + " points indexed");
             return true;
         } else {
             return false;

@@ -74,7 +74,6 @@ public class WorldEditor {
                             block.setTypeIdAndData(blocks[index], blockData[index], true);
                             LocationIndexer.getInstance(plugin).addLocation(blockLocation);
                         } catch (NullPointerException e) {
-                            logger.severe(e.getMessage());
                             throw new NullPointerException(e.getMessage());
                         }
                     } catch (NullPointerException e) {
